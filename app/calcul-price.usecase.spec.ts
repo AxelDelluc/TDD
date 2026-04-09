@@ -87,7 +87,7 @@ describe("CalculatePriceUseCase", () => {
         expect(result).toBe(18);
     })
 
-    test("For one product with percentile reduction", async () => {
+    test("For one product with percentile reduction and a final price < 1", async () => {
         const result = await calculatePrice.execute([
             {
                 price: 1,
@@ -96,5 +96,21 @@ describe("CalculatePriceUseCase", () => {
             },
         ], "percentile")
         expect(result).toBe(1);
+    })
+
+    test("For two product or more with percentile reduction", async () => {
+        const result = await calculatePrice.execute([
+            {
+                price: 20,
+                name: "product1",
+                quantity: 1,
+            },
+            {
+                price: 20,
+                name: "product1",
+                quantity: 1,
+            }
+        ], 'percentile')
+        expect(result).toBe(36)
     })
 });
