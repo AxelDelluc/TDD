@@ -21,7 +21,7 @@ export class CalculatePriceUseCase {
     const reduction = await this.reductionGateway.getReductionByCode(code);
 
     product.forEach((p) => {
-      p.price = this.applyReduction(reduction, p.price);
+      p.price = this.applyReduction(reduction, p.price, p.quantity);
     })
 
     return product.reduce(
@@ -30,7 +30,7 @@ export class CalculatePriceUseCase {
     );
   }
 
-  private applyReduction(reduction: { type: string, amount: number }, price: number): number {
+  private applyReduction(reduction: { type: string, amount: number }, price: number, quantity: number): number {
     switch (reduction.type) {
       case 'DIRECT_REDUCTION': {
         price = price - reduction.amount;
@@ -38,6 +38,12 @@ export class CalculatePriceUseCase {
       }
       case 'PERCENTILE_REDUCTION': {
         price = price - (price * (reduction.amount / 100))
+        break;
+      }
+      case '2_FOR_1': {
+        if (quantity % 2 === 0) {
+          price = price / 2
+        }
         break;
       }
     }
