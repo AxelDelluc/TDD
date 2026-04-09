@@ -41,6 +41,9 @@ export class CalculatePriceUseCase {
       }
       case 'PERCENTILE_REDUCTION': {
         price = price - (price * (reduction.amount / 100))
+        if (price < 1) {
+          price = 1
+        }
         break;
       }
     }
