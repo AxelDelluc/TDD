@@ -12,6 +12,12 @@ class StubReductionGateway implements ReductionGateway {
                 amount: 10
             }
         }
+        if (code === "2for1") {
+            return {
+                type: "2_FOR_1",
+                amount: 0
+            }
+        }
         return {
             type: "DIRECT_REDUCTION",
             amount: 10
@@ -112,5 +118,15 @@ describe("CalculatePriceUseCase", () => {
             }
         ], 'percentile')
         expect(result).toBe(36)
+    })
+    test("For one product with 2 for 1 reduction", async () => {
+        const result = await calculatePrice.execute([
+            {
+                price: 10,
+                name: "product1",
+                quantity: 2,
+            },
+        ], "2for1")
+        expect(result).toBe(10);
     })
 });
