@@ -34,18 +34,15 @@ export class CalculatePriceUseCase {
     switch (reduction.type) {
       case 'DIRECT_REDUCTION': {
         price = price - reduction.amount;
-        if (price < 1) {
-          price = 1
-        }
         break;
       }
       case 'PERCENTILE_REDUCTION': {
         price = price - (price * (reduction.amount / 100))
-        if (price < 1) {
-          price = 1
-        }
         break;
       }
+    }
+    if (price < 1) {
+      price = 1
     }
     return price;
   }
